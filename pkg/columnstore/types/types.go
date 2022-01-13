@@ -1,15 +1,47 @@
 package types
 
-type Type uint64
+type Type interface {
+	NewValue(data interface{}) Value
+}
+
+type MapType struct {
+	Key   Type
+	Value Type
+}
+
+func Map(keyType Type, valueType Type) Type {
+	return &MapType{
+		Key:   keyType,
+		Value: valueType,
+	}
+}
+
+func (m *MapType) NewValue(data interface{}) Value {
+	return Value{
+		Type: m,
+		Data: data,
+	}
+}
+
+type StaticType uint64
 
 const (
-	String Type = iota
+	NullType StaticType = iota
+	String
 	Uint64
 	Int64
 	UUID
 )
 
+func (t StaticType) NewValue(data interface{}) Value {
+	return Value{
+		Type: t,
+		Data: data,
+	}
+}
+
 type Value struct {
+	Type Type
 	Data interface{}
 }
 
