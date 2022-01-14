@@ -1,5 +1,7 @@
 package types
 
+import "fmt"
+
 type Type interface {
 	NewValue(data interface{}) Value
 }
@@ -43,6 +45,10 @@ func (t StaticType) NewValue(data interface{}) Value {
 type Value struct {
 	Type Type
 	Data interface{}
+}
+
+func (v Value) String() string {
+	return fmt.Sprint(v.Data)
 }
 
 func (v *Value) Less(other Value) bool {

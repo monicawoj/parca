@@ -1,5 +1,7 @@
 package columnstore
 
+import "fmt"
+
 type Table struct {
 	Name     string
 	Schema   *Schema
@@ -32,4 +34,23 @@ func (t *Table) Insert(rows ...Row) error {
 	t.Granules = append(t.Granules, g)
 
 	return nil
+}
+
+// String prints out the table contents in human readable rows
+func (t *Table) String() string {
+	var s string
+	for _, granule := range t.Granules {
+		for _, part := range granule.Parts {
+			for _, col := range part.Columns {
+
+				switch t := col.(type) {
+				case *PlainColumn:
+					s += fmt.Sprint(t.enc)
+					s += "\n"
+				}
+			}
+		}
+	}
+
+	return s
 }

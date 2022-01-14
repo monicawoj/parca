@@ -31,9 +31,15 @@ func NewPart(s *Schema) *Part {
 	return p
 }
 
+// Insert ordered rows into a part
 func (p *Part) Insert(rows ...Row) error {
-	// TODO
-
+	for i, row := range rows {
+		for j, d := range row.ColumnData {
+			if err := p.Columns[j].InsertAt(i, d); err != nil {
+				return err
+			}
+		}
+	}
 	return nil
 }
 

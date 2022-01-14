@@ -87,9 +87,7 @@ type PlainColumnType struct {
 }
 
 func (p *PlainColumnType) NewColumn() Column {
-	return &PlainColumn{
-		typ: p,
-	}
+	return NewPlainColumn(p)
 }
 
 func (p *PlainColumnType) ValueType() types.Type {

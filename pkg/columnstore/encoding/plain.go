@@ -2,6 +2,8 @@ package encoding
 
 import (
 	"errors"
+	"fmt"
+	"strings"
 
 	"github.com/parca-dev/parca/pkg/columnstore/types"
 )
@@ -18,6 +20,19 @@ func NewPlain(typ types.Type, maxCount int) *Plain {
 		values: make([]types.Value, maxCount),
 		count:  0,
 	}
+}
+
+func (c *Plain) String() string {
+	s := "[ "
+	for i := 0; i < c.count; i++ {
+		s += fmt.Sprint(c.values[i])
+		s += ","
+	}
+	s = strings.TrimSuffix(s, ",")
+
+	s += " ]"
+
+	return s
 }
 
 func (c *Plain) Insert(index int, v types.Value) (int, error) {
