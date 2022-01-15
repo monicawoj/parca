@@ -47,6 +47,12 @@ func (t *Table) String() string {
 				case *PlainColumn:
 					s += fmt.Sprint(t.enc)
 					s += "\n"
+				case *MapColumn:
+					for key, c := range t.columns {
+						s += fmt.Sprint(key)
+						s += ": "
+						s += fmt.Sprint(c)
+					}
 				}
 			}
 		}
