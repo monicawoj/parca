@@ -51,5 +51,15 @@ func Test_DictionaryRLE_Insert(t *testing.T) {
 	require.NoError(t, err)
 	require.Equal(t, i, count)
 
-	require.Equal(t, "{test1},{test2},{test3},\n", p.String())
+	require.Equal(t, "test1,test2,test3,\n", p.String())
+}
+
+func Test_DictionaryRLE_AppendAt(t *testing.T) {
+	p := NewDictionaryRLE(types.String, 10)
+
+	i := 1
+	count, err := p.Insert(i, types.Value{Data: "test1"})
+	require.NoError(t, err)
+	require.Equal(t, i, count)
+	require.Equal(t, "<nil>,test1,\n", p.String())
 }

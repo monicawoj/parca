@@ -25,8 +25,16 @@ func NewDictionaryRLE(typ types.Type, maxCount int) *DictionaryRLE {
 		appender: app,
 		count:    0,
 
-		dict: map[types.Value]int64{},
-		rev:  map[int64]types.Value{},
+		dict: map[types.Value]int64{
+			{
+				Data: nil, // Always reserve the 0 slot for nil
+			}: 0,
+		},
+		rev: map[int64]types.Value{
+			0: {
+				Data: nil, // Always reserve the 0 slot for nil
+			},
+		},
 	}
 }
 
@@ -51,10 +59,12 @@ func (c *DictionaryRLE) Insert(index int, v types.Value) (int, error) {
 		c.rev[val] = v
 	}
 
-	switch index {
-	case c.count:
+	switch {
+	case index == c.count: // fast append
 		c.appender.Append(int64(val))
-	default:
+	case index > c.count: // append at
+		c.appender.AppendAt(uint16(index), int64(val))
+	default: // insert
 		c.appender.(*chunkenc.RLEAppender).Insert(uint16(index), int64(val))
 	}
 
