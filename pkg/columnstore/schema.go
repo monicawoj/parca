@@ -111,9 +111,7 @@ type MapColumnType struct {
 }
 
 func (m *MapColumnType) NewColumn() Column {
-	return &MapColumn{
-		typ: m,
-	}
+	return NewMapColumn(m)
 }
 
 func (m *MapColumnType) ValueType() types.Type {
