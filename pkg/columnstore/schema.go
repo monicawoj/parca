@@ -8,6 +8,7 @@ import (
 type Schema struct {
 	ColumnDefinitions ColumnDefinitions
 	OrderedColumns    ColumnDefinitions
+	GranuleSize       int
 }
 
 func NewSchema(
@@ -16,13 +17,24 @@ func NewSchema(
 ) *Schema {
 	s := &Schema{
 		ColumnDefinitions: columns,
+		GranuleSize:       2 ^ 13,
 	}
 
 	for _, option := range options {
 		option(s)
 	}
 
+	for _, columnDef := range columns {
+		columnDef.Schema = s
+	}
+
 	return s
+}
+
+func WithGranuleSize(granuleSize int) func(s *Schema) {
+	return func(s *Schema) {
+		s.GranuleSize = granuleSize
+	}
 }
 
 func WithOrderedColumns(
@@ -50,6 +62,7 @@ type ColumnDefinitions []*ColumnDefinition
 type ColumnDefinition struct {
 	Name       string
 	ColumnType ColumnType
+	Schema     *Schema
 }
 
 func NewColumnDef(
@@ -63,11 +76,11 @@ func NewColumnDef(
 }
 
 func (c *ColumnDefinition) NewColumn() Column {
-	return c.ColumnType.NewColumn()
+	return c.ColumnType.NewColumn(c)
 }
 
 type ColumnType interface {
-	NewColumn() Column
+	NewColumn(def *ColumnDefinition) Column
 	ValueType() types.Type
 }
 
@@ -77,17 +90,17 @@ func NewPlainColumnType(
 ) *PlainColumnType {
 	return &PlainColumnType{
 		typ:      t,
-		Encoding: encoding,
+		encoding: encoding,
 	}
 }
 
 type PlainColumnType struct {
-	Encoding encoding.Encoding
+	encoding encoding.Encoding
 	typ      types.Type
 }
 
-func (p *PlainColumnType) NewColumn() Column {
-	return NewPlainColumn(p)
+func (p *PlainColumnType) NewColumn(def *ColumnDefinition) Column {
+	return NewPlainColumn(def, p)
 }
 
 func (p *PlainColumnType) ValueType() types.Type {
@@ -101,17 +114,17 @@ func NewMapColumnType(
 ) *MapColumnType {
 	return &MapColumnType{
 		typ:      types.Map(keyType, valueType),
-		Encoding: encoding,
+		encoding: encoding,
 	}
 }
 
 type MapColumnType struct {
-	Encoding encoding.Encoding
+	encoding encoding.Encoding
 	typ      types.Type
 }
 
-func (m *MapColumnType) NewColumn() Column {
-	return NewMapColumn(m)
+func (m *MapColumnType) NewColumn(def *ColumnDefinition) Column {
+	return NewMapColumn(def, m)
 }
 
 func (m *MapColumnType) ValueType() types.Type {

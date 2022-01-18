@@ -20,6 +20,7 @@ func TestTable(t *testing.T) {
 			timestampColumn,
 			valueColumn,
 		},
+		WithGranuleSize(2^13), // 8192
 		WithOrderedColumns(
 			labelsColumn,
 			timestampColumn,

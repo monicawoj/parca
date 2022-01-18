@@ -8,7 +8,7 @@ import (
 )
 
 func Test_DictionaryRLE(t *testing.T) {
-	p := NewDictionaryRLE(types.String, 10)
+	p := NewDictionaryRLE(types.String)
 
 	i := 0
 	count, err := p.Insert(i, types.Value{Data: "test1"})
@@ -26,14 +26,10 @@ func Test_DictionaryRLE(t *testing.T) {
 	i++
 	require.NoError(t, err)
 	require.Equal(t, i, count)
-
-	indexRange, err := p.Find(types.Value{Data: "test2"})
-	require.NoError(t, err)
-	require.Equal(t, IndexRange{Start: 1, End: 3}, indexRange)
 }
 
 func Test_DictionaryRLE_Insert(t *testing.T) {
-	p := NewDictionaryRLE(types.String, 10)
+	p := NewDictionaryRLE(types.String)
 
 	i := 0
 	count, err := p.Insert(i, types.Value{Data: "test1"})
@@ -55,7 +51,7 @@ func Test_DictionaryRLE_Insert(t *testing.T) {
 }
 
 func Test_DictionaryRLE_AppendAt(t *testing.T) {
-	p := NewDictionaryRLE(types.String, 10)
+	p := NewDictionaryRLE(types.String)
 
 	i := 1
 	count, err := p.Insert(i, types.Value{Data: "test1"})

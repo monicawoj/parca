@@ -4,24 +4,36 @@ import "fmt"
 
 type Type interface {
 	NewValue(data interface{}) Value
+	Null() Value
 }
 
 type MapType struct {
 	Key   Type
 	Value Type
+
+	nullValue Value
 }
 
 func Map(keyType Type, valueType Type) Type {
-	return &MapType{
+	t := &MapType{
 		Key:   keyType,
 		Value: valueType,
 	}
+
+	return t
 }
 
 func (m *MapType) NewValue(data interface{}) Value {
 	return Value{
 		Type: m,
 		Data: data,
+	}
+}
+
+func (m *MapType) Null() Value {
+	return Value{
+		Type: m,
+		Data: nil,
 	}
 }
 
@@ -39,6 +51,13 @@ func (t StaticType) NewValue(data interface{}) Value {
 	return Value{
 		Type: t,
 		Data: data,
+	}
+}
+
+func (t StaticType) Null() Value {
+	return Value{
+		Type: t,
+		Data: nil,
 	}
 }
 

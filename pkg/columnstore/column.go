@@ -14,15 +14,20 @@ type Column interface {
 
 // PlainColumn ...
 type PlainColumn struct {
+	def *ColumnDefinition
 	typ *PlainColumnType
 	enc encoding.Array
 }
 
 // NewPlainColumn ...
-func NewPlainColumn(ctyp *PlainColumnType) *PlainColumn {
+func NewPlainColumn(
+	def *ColumnDefinition,
+	ctyp *PlainColumnType,
+) *PlainColumn {
 	return &PlainColumn{
+		def: def,
 		typ: ctyp,
-		enc: encoding.NewPlain(ctyp.typ, 10), // TODO arbitrary number is arbitrary
+		enc: encoding.NewPlain(ctyp.typ),
 	}
 }
 
@@ -34,13 +39,18 @@ func (p *PlainColumn) InsertAt(index int, value types.Value) error {
 
 // MapColumn ...
 type MapColumn struct {
+	def     *ColumnDefinition
 	typ     *MapColumnType
 	columns map[interface{}]encoding.Array
 }
 
 // NewMapColumn ...
-func NewMapColumn(typ *MapColumnType) *MapColumn {
+func NewMapColumn(
+	def *ColumnDefinition,
+	typ *MapColumnType,
+) *MapColumn {
 	return &MapColumn{
+		def:     def,
 		typ:     typ,
 		columns: map[interface{}]encoding.Array{},
 	}
@@ -67,7 +77,7 @@ func (m *MapColumn) InsertAt(index int, value types.Value) error {
 			for key, val := range v {
 				array, ok := m.columns[key]
 				if !ok {
-					array = encoding.NewDictionaryRLE(types.String, -1)
+					array = encoding.NewDictionaryRLE(types.String)
 					m.columns[key] = array
 				}
 

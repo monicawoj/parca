@@ -11,20 +11,18 @@ import (
 type Plain struct {
 	typ    types.Type
 	values []types.Value
-	count  int
 }
 
-func NewPlain(typ types.Type, maxCount int) *Plain {
+func NewPlain(typ types.Type) *Plain {
 	return &Plain{
 		typ:    typ,
-		values: make([]types.Value, maxCount),
-		count:  0,
+		values: make([]types.Value, 0, 10), // TODO arbitrary number is arbitrary, this should be optimized using a pool of plain encoding objects to re-use rather than pre-allocating.
 	}
 }
 
 func (c *Plain) String() string {
 	s := "[ "
-	for i := 0; i < c.count; i++ {
+	for i := 0; i < len(c.values); i++ {
 		s += fmt.Sprint(c.values[i])
 		s += ","
 	}
@@ -36,37 +34,22 @@ func (c *Plain) String() string {
 }
 
 func (c *Plain) Insert(index int, v types.Value) (int, error) {
-	if index < 0 || index > len(c.values) {
+	if index < 0 {
 		return -1, errors.New("index out of range")
 	}
-
-	copy(c.values[index+1:], c.values[index:])
-	c.values[index] = v
-
-	c.count++
-	return c.count, nil
-}
-
-type IndexRange struct {
-	Start int
-	End   int
-}
-
-func (c *Plain) Find(v types.Value) (IndexRange, error) {
-	indexRange := IndexRange{
-		Start: -1,
-		End:   -1,
+	if index < len(c.values) {
+		return -1, errors.New("cannot insert out of order")
 	}
-	for i := 0; i < len(c.values); i++ {
-		if c.values[i].Less(v) {
-			indexRange.Start = i + 1
-			continue
-		}
-		// Something wrong here
-		if indexRange.Start != -1 && c.values[i].Equal(v) {
-			indexRange.End = i
+
+	if index > len(c.values) {
+		// This could be further optimized by noting the first index where the
+		// value is a non-null value as columns are expected to be very sparse,
+		// but this decision should be backed by data.
+		for i := len(c.values); i < index; i++ {
+			c.values = append(c.values, c.typ.Null())
 		}
 	}
 
-	return indexRange, nil
+	c.values = append(c.values, v)
+	return len(c.values), nil
 }

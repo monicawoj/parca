@@ -16,7 +16,7 @@ type DictionaryRLE struct {
 	count    int
 }
 
-func NewDictionaryRLE(typ types.Type, maxCount int) *DictionaryRLE {
+func NewDictionaryRLE(typ types.Type) *DictionaryRLE {
 	enc := chunkenc.NewRLEChunk()
 	app, _ := enc.Appender()
 	return &DictionaryRLE{
@@ -70,31 +70,4 @@ func (c *DictionaryRLE) Insert(index int, v types.Value) (int, error) {
 
 	c.count++
 	return c.count, nil
-}
-
-func (c *DictionaryRLE) Find(v types.Value) (IndexRange, error) {
-	indexRange := IndexRange{
-		Start: -1,
-		End:   -1,
-	}
-
-	_, ok := c.dict[v]
-	if !ok {
-		return indexRange, nil
-	}
-
-	it := c.values.Iterator(nil)
-	for i := 0; it.Next(); i++ {
-		val := c.rev[it.At()]
-		if val.Less(v) {
-			indexRange.Start = i + 1
-			continue
-		}
-
-		if indexRange.Start != -1 && val.Equal(v) {
-			indexRange.End = i
-		}
-	}
-
-	return indexRange, nil
 }

@@ -1,8 +1,12 @@
 package columnstore
 
+import "sync"
+
 type Granule struct {
 	Schema *Schema
-	Parts  []*Part
+
+	mtx   *sync.Mutex
+	Parts []*Part
 
 	totalRows int
 }
@@ -10,6 +14,7 @@ type Granule struct {
 func NewGranule(s *Schema) *Granule {
 	return &Granule{
 		Schema: s,
+		mtx:    &sync.Mutex{},
 	}
 }
 
@@ -51,6 +56,9 @@ func (g *Granule) Insert(rows ...Row) (int, error) {
 	if err != nil {
 		return g.totalRows, err
 	}
+
+	g.mtx.Lock()
+	defer g.mtx.Unlock()
 	g.Parts = append(g.Parts, p)
 
 	g.totalRows += len(rows)

@@ -16,5 +16,4 @@ const (
 // Array is the abstraction of the encoding array
 type Array interface {
 	Insert(int, types.Value) (int, error)
-	Find(types.Value) (IndexRange, error)
 }
