@@ -11,7 +11,7 @@ require (
 	github.com/dgraph-io/sroar v0.0.0-20211209113350-3e3f1b382a64
 	github.com/gin-gonic/gin v1.7.7 // indirect
 	github.com/go-chi/cors v1.2.0
-	github.com/go-delve/delve v1.8.0
+	github.com/go-delve/delve v1.9.1
 	github.com/go-kit/log v0.2.0
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-ozzo/ozzo-validation/v4 v4.3.0
