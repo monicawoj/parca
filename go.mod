@@ -11,7 +11,7 @@ require (
 	github.com/dgraph-io/sroar v0.0.0-20211209113350-3e3f1b382a64
 	github.com/gin-gonic/gin v1.7.7 // indirect
 	github.com/go-chi/cors v1.2.0
-	github.com/go-delve/delve v1.8.0
+	github.com/go-delve/delve v1.20.0
 	github.com/go-kit/log v0.2.0
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-ozzo/ozzo-validation/v4 v4.3.0
@@ -38,8 +38,8 @@ require (
 	go.opentelemetry.io/otel/sdk v1.3.0
 	go.opentelemetry.io/otel/trace v1.3.0
 	go.uber.org/atomic v1.9.0
-	golang.org/x/net v0.0.0-20220105145211-5b0dc2dfae98
-	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
+	golang.org/x/net v0.0.0-20220722155237-a158d28d115b
+	golang.org/x/sync v0.0.0-20220722155255-886fb9371eb4
 	google.golang.org/genproto v0.0.0-20220118154757-00ab72f36ad5
 	google.golang.org/grpc v1.43.0
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.2.0
