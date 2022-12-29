@@ -16,7 +16,7 @@ require (
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-ozzo/ozzo-validation/v4 v4.3.0
 	github.com/goburrow/cache v0.1.4
-	github.com/google/pprof v0.0.0-20211214055906-6f57359322fd
+	github.com/google/pprof v0.0.0-20221118152302-e6195bd50e26
 	github.com/google/uuid v1.3.0
 	github.com/grpc-ecosystem/go-grpc-middleware v1.3.0
 	github.com/grpc-ecosystem/go-grpc-middleware/providers/kit/v2 v2.0.0-20201002093600-73cf2ae9d891
@@ -24,7 +24,7 @@ require (
 	github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.7.3
 	github.com/hashicorp/go-multierror v1.1.1
-	github.com/ianlancetaylor/demangle v0.0.0-20211126204342-3ad08eb09c01
+	github.com/ianlancetaylor/demangle v0.0.0-20220319035150-800ac71e25c2
 	github.com/improbable-eng/grpc-web v0.15.0
 	github.com/oklog/run v1.1.0
 	github.com/prometheus/client_golang v1.12.0
@@ -47,7 +47,7 @@ require (
 	gopkg.in/ini.v1 v1.66.2 // indirect
 	gopkg.in/yaml.v2 v2.4.0
 	k8s.io/klog/v2 v2.40.1 // indirect
-	modernc.org/sqlite v1.14.5
+	modernc.org/sqlite v1.20.1
 	nhooyr.io/websocket v1.8.7 // indirect
 )
 
